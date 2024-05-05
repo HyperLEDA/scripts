@@ -1,0 +1,1 @@
+This is the repository for the scripts that transfer data from astronomical catalogs to HyperLeda database.
