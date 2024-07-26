@@ -1,0 +1,33 @@
+objtype,description
+G,Galaxy or quasar
+Q,QSO
+g,"Probable galaxy, measurement but object not seen (this class will be suppressed)"
+g,Extended source
+,Probably not an extended source (not public)
+c,Star cluster
+r,Supernova remnant
+h,HII region
+n,Gaseous nebula
+p,Planetary nebula
+S,Star
+?,Extended source of unknown/uncertain nature
+!,Plate defect or transcient/moving object
+sn,Supernova
+M,Multiple galaxy
+R,Radiosource
+M2,Pair of galaxies
+M3,Triple galaxy
+MG,Group of galaxies
+MC,Cluster of galaxies
+u,Non-existent object (error in catalogue)
+!,Wrong detection (eg. close stars taken for an extended source)
+rn,Reflexion Nebulae
+S2,Double star
+S3,Triple star
+a,Stellar association
+PG,Part of galaxy
+HI,HI source
+S+,"Group of stars, Asterism."
+gc,Globular Cluster
+oc,Open cluster
+kn,kilonova

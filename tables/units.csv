@@ -1,0 +1,16 @@
+Parameter,Unit,Description
+objtype,,Type of object (G=galaxy; S=Star ...)
+brief,mag/arcsec2,Mean effective surface brightness
+bt,mag,Total B-magnitude
+it,mag,Total I-magnitude
+v,km/s,Mean Heliocentric radial velocity (cz)
+ag,mag,Galactic extinction in B-band
+btc,mag,Total apparent corrected B-magnitude
+itc,mag,Total apparent corrected I-magnitude
+vlg,km/s,Radial velocity (cz) with respect to the Local Group
+vgsr,km/s,Radial velocity (cz) with respect to the GSR
+vvir,km/s,Radial velocity (cz) corrected for LG infall onto Virgo
+v3k,km/s,Radial velocity (cz) with respect to the CMB radiation
+modz,mag,Cosmological distance modulus (from vvir with ΛCDM)
+modbest,mag,"Best distance modulus, combining mod0 and modz"
+mabs,mag,Absolute B-band magnitude
