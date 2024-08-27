@@ -24,7 +24,6 @@ def leda_dtyper(row) -> str:
 
 
 for old_table_name in ["m000", "designation", "bref04"]:
-    print(old_table_name)
     # читаем csv
     table_columns = pd.read_csv(f"./tables/{old_table_name}_info.csv")
     table_columns["data_type"] = table_columns.apply(leda_dtyper, axis=1)
