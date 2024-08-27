@@ -38,9 +38,28 @@ df.rename(columns={"field": "column_name"}, inplace=True)
 print(df.columns)
 df = df[['column_name', 'unit',"description", "ucd"]]
 
-# поправка невалидных значений
-df = df.replace({"src.morph.param;meta.code.multip;stat.mean": "src.morph.param;stat.mean",
-                         "src.morph.type;stat.error": "stat.error;src.morph.type"})
+# ucd fix
+def ucd_fix_stat_error(row):
+    # "phys.angSize.smajAxis;stat.error" -> "stat.error;phys.angSize.smajAxis"
+    if row["ucd"] == row["ucd"] and "stat.error" in row["ucd"]:
+        splitted_row = row["ucd"].split(";")
+        return  ";".join([splitted_row[-1]] + splitted_row[:-1])
+    return row["ucd"]
+
+df['ucd'] = df.apply(ucd_fix_stat_error, axis=1)
+    
+
+df = df.replace({
+    "src.morph.param;meta.code.multip;stat.mean": "src.morph.param;stat.mean",
+    "src.morph.type;stat.error": "stat.error;src.morph.type",
+    "spect.line;meta.main;stat.mean": "phot.mag;spect.line;meta.main;stat.mean",
+    })
+
+# units fix
+df = df.replace({
+    "log(0.1 arcmin)": "dex(0.1 arcmin)",
+    "log": "dex",
+    })
 
 
 for table_name in ["m000", "designation", "bref04"]:
@@ -53,8 +72,6 @@ for table_name in ["m000", "designation", "bref04"]:
     table_columns = pd.read_sql_query(query, conn)
     table_columns = pd.merge(table_columns, df, on="column_name", how="left")
     table_columns.rename(columns={"column_name": "name"}, inplace=True)
-
-    # print(table_columns)
 
     table_columns.to_csv(f"./tables/{table_name}_info.csv", index=False)
 
