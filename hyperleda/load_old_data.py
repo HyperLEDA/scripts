@@ -1,7 +1,7 @@
 import hyperleda
+import os
 import pandas as pd
 import psycopg2
-import os
 
 
 HYPERLEDA_BIBCODE = "2014A&A...570A..13M" # bibcode for Leda 2014 article from ads
@@ -26,9 +26,8 @@ def leda_dtyper(row) -> str:
 
 for old_table_name in ["m000", "designation"]:
     # getting columns info
-    table_columns = pd.read_csv(f"./tables/{old_table_name}_info.csv")
+    table_columns = pd.read_csv(f"./hyperleda/tables/{old_table_name}_info.csv")
     table_columns["data_type"] = table_columns.apply(leda_dtyper, axis=1)
-
     table_dict = table_columns.to_dict("records")
 
     # table creation
