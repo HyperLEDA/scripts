@@ -1,22 +1,23 @@
 import hyperleda
-import numpy as np
 import pandas as pd
 import psycopg2
+import os
 
+
+HYPERLEDA_BIBCODE = "2014A&A...570A..13M" # bibcode for Leda 2014 article from ads
 
 conn = psycopg2.connect(
-    host="localhost",
-    database="hyperleda",
-    user="hyperleda",
-    password="password",
-    port="6432"
+    host= os.getenv("HYPERLEDA_DB_HOST"),
+    database=os.getenv("HYPERLEDA_DB_DATABASE"),
+    user=os.getenv("HYPERLEDA_DB_USER"),
+    password=os.getenv("HYPERLEDA_DB_PASSWORD"),
+    port=os.getenv("HYPERLEDA_DB_PORT")
 )
 
-client = hyperleda.HyperLedaClient(endpoint="http://89.169.133.242") 
+client = hyperleda.HyperLedaClient(endpoint=hyperleda.TEST_ENDPOINT) 
 
 
 def del_nans(row):
-    # remove nans
     return {k:v for k,v in row.items() if v == v}
 
 def leda_dtyper(row) -> str: 
@@ -31,7 +32,7 @@ for old_table_name in ["m000", "designation"]:
     table_dict = table_columns.to_dict("records")
 
     # table creation
-    table_name = f"new_{old_table_name}" 
+    table_name = f"hyperleda_{old_table_name}" 
 
     table_id = client.create_table(
         hyperleda.CreateTableRequestSchema(
@@ -39,7 +40,7 @@ for old_table_name in ["m000", "designation"]:
             columns=[
                 hyperleda.ColumnDescription(**del_nans(column)) for column in table_dict
                 ],
-            bibcode="2014A&A...570A..13M", # bibcode for Leda 2014 article from ads
+            bibcode=HYPERLEDA_BIBCODE,
         )
     )
 
@@ -49,9 +50,7 @@ for old_table_name in ["m000", "designation"]:
     batch = 500
     test_limit = 1000
 
-    while True:
-        if offset > test_limit:
-            break
+    while offset <= test_limit:
 
         query = f"SELECT * FROM {old_table_name} OFFSET {offset} LIMIT {batch};"
         data = pd.read_sql_query(query, conn)
