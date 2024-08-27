@@ -73,7 +73,6 @@ modz,real,mag,Cosmological distance modulus (from vvir with &Lambda;CDM),phot.ma
 mod0,real,mag,Distance modulus from distance measurements,phot.mag.distMod
 mabs,real,mag,Absolute B-band magnitude,phys.magAbs;em.opt.B
 numtype,smallint,,Object Type,
-hptr,bit,,,
 agnclass,character varying,,Activity class of AGN,src.class
 f_astrom,smallint,,Precision flag on astrometry,meta.code.qual
 e_mod0,real,mag,Actual error on mod0 (Distance modulus from distance measurements),phot.mag.distMod

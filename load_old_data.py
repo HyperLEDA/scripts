@@ -23,7 +23,7 @@ def leda_dtyper(row) -> str:
     return hyperleda.DataType(row["data_type"])
 
 
-for old_table_name in ["m000", "designation", "bref04"]:
+for old_table_name in ["m000", "designation"]:
     # getting columns info
     table_columns = pd.read_csv(f"./tables/{old_table_name}_info.csv")
     table_columns["data_type"] = table_columns.apply(leda_dtyper, axis=1)
@@ -46,11 +46,19 @@ for old_table_name in ["m000", "designation", "bref04"]:
     print(f"Created table '{table_name}' with ID: {table_id}")
 
     offset = 0
-    batch = 10000
+    batch = 500
+    test_limit = 1000
 
     while True:
+        if offset > test_limit:
+            break
+
         query = f"SELECT * FROM {old_table_name} OFFSET {offset} LIMIT {batch};"
         data = pd.read_sql_query(query, conn)
+        
+        # removing unknown bit type field
+        if old_table_name == "m000":
+            data = data.drop("hptr", axis=1)
 
         if data.empty:
             break
@@ -58,7 +66,7 @@ for old_table_name in ["m000", "designation", "bref04"]:
         print(data)
         client.add_data(table_id, data)
 
-        print(f"Added {data.shape[0]} rows to the table '{table_name}'")
+        print(f"Added {data.shape[0]} rows to the table {table_name}. In total {offset + batch} rows")
 
         offset += batch
     print(f"Added all data to the table '{table_name}'")

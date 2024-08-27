@@ -35,7 +35,7 @@ def check_nans(row, col1='unit', col2='units') -> str:
 df['unit'] = df.apply(check_nans, axis=1)
 df = df.drop('units', axis=1)
 df.rename(columns={"field": "column_name"}, inplace=True)
-print(df.columns)
+# print(df.columns)
 df = df[['column_name', 'unit',"description", "ucd"]]
 
 # ucd fix
@@ -70,6 +70,11 @@ for table_name in ["m000", "designation", "bref04"]:
     FROM INFORMATION_SCHEMA.COLUMNS 
     WHERE TABLE_NAME = '{table_name}'"""
     table_columns = pd.read_sql_query(query, conn)
+
+    if table_name == "m000":
+        # bit type unknown column
+        table_columns = table_columns.drop(table_columns.loc[table_columns['column_name']=="hptr"].index)
+
     table_columns = pd.merge(table_columns, df, on="column_name", how="left")
     table_columns.rename(columns={"column_name": "name"}, inplace=True)
 
