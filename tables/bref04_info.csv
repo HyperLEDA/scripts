@@ -1,0 +1,8 @@
+name,data_type,description,ucd
+iref,DataType.integer,Code of Bib.Ref.,meta.id
+refclair,DataType.character_varying,,
+bibcode,DataType.character_varying,Bibcode,meta.bib.bibcode
+status,DataType.smallint,,
+year,DataType.smallint,,
+author1,DataType.character_varying,,
+time,DataType.timestamp,,
