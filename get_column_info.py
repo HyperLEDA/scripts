@@ -37,16 +37,15 @@ df = df.drop('units', axis=1)
 df.rename(columns={"field": "column_name"}, inplace=True)
 print(df.columns)
 df = df[['column_name', 'unit',"description", "ucd"]]
-# print(df)
+
+# поправка невалидных значений
+df = df.replace({"src.morph.param;meta.code.multip;stat.mean": "src.morph.param;stat.mean",
+                         "src.morph.type;stat.error": "stat.error;src.morph.type"})
 
 
 for table_name in ["m000", "designation", "bref04"]:
     if table_name != "m000":
         df = df[['column_name',"description", "ucd"]]
-    else: 
-        # меняем невалидные значения
-        df = df.replace({"src.morph.param;meta.code.multip;stat.mean": "src.morph.param;stat.mean",
-                         "src.morph.type;stat.error": "stat.error;src.morph.type"})
 
     query = f"""SELECT COLUMN_NAME, DATA_TYPE 
     FROM INFORMATION_SCHEMA.COLUMNS 
