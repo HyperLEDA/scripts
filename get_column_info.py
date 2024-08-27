@@ -43,6 +43,11 @@ df = df[['column_name', 'unit',"description", "ucd"]]
 for table_name in ["m000", "designation", "bref04"]:
     if table_name != "m000":
         df = df[['column_name',"description", "ucd"]]
+    else: 
+        # меняем невалидные значения
+        df = df.replace({"src.morph.param;meta.code.multip;stat.mean": "src.morph.param;stat.mean",
+                         "src.morph.type;stat.error": "stat.error;src.morph.type"})
+
     query = f"""SELECT COLUMN_NAME, DATA_TYPE 
     FROM INFORMATION_SCHEMA.COLUMNS 
     WHERE TABLE_NAME = '{table_name}'"""
@@ -50,12 +55,8 @@ for table_name in ["m000", "designation", "bref04"]:
     table_columns = pd.merge(table_columns, df, on="column_name", how="left")
     table_columns.rename(columns={"column_name": "name"}, inplace=True)
 
-    print(table_columns)
+    # print(table_columns)
 
-    def leda_dtyper(row) -> str: 
-        return hyperleda.DataType(row["data_type"])
-
-    table_columns["data_type"] = table_columns.apply(leda_dtyper, axis=1)
     table_columns.to_csv(f"./tables/{table_name}_info.csv", index=False)
 
 conn.close()
