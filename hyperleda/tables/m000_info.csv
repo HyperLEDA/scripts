@@ -1,0 +1,86 @@
+name,data_type,unit,description,ucd
+pgc,integer,,PGC number,meta.id;meta.main
+objname,character varying,,Principal name,meta.id;meta.main
+objtype,character,,Type of object (G=galaxy; S=Star ...),src.class
+al1950,double precision,hour,RA 1950 (hours decimal value),pos.eq.ra
+de1950,double precision,deg,DEC 1950 (degrees decimal value),pos.eq.dec
+al2000,double precision,hour,RA 2000 (hours decimal value),pos.eq.ra;meta.main;stat.mean
+de2000,double precision,deg,DEC 2000 (degrees decimal value),pos.eq.dec;meta.main;stat.mean
+l2,double precision,deg,Galactic longitude,pos.galactic.lon
+b2,double precision,deg,Galactic latitude,pos.galactic.lat
+sgl,double precision,deg,Supergalactic longitude,pos.supergalactic.lon
+sgb,double precision,deg,Supergalactic latitude,pos.supergalactic.lat
+type,character varying,,Morphological type,src.morph.type;meta.main
+bar,character,,Barred galaxy (B),src.morph.param;stat.mean
+ring,character,,Galaxy with ring (R),src.morph.param;stat.mean
+multiple,character,,Multiple galaxy (M),src.morph.param;stat.mean
+compactness,character,,Compact (C) or diffuse (D),src.morph.param;stat.mean
+t,real,,Morphological type code,src.morph.type;meta.main;stat.mean
+e_t,real,,Actual error on t (Morphological type code),stat.error;src.morph.type
+logd25,real,dex(0.1 arcmin),log of apparent diameter (d25 in 0.1 arcmin),phys.angSize.smajAxis;meta.main;stat.mean
+e_logd25,real,dex(0.1 arcmin),Actual error on logd25 (log of apparent diameter in 0.1 arcmin),stat.error;phys.angSize.smajAxis
+logr25,real,dex,log of axis ratio (major axis/minor axis),phys.size.axisRatio;meta.main;stat.mean
+e_logr25,real,dex,Actual error on logr25 (log of axis ratio: major axis/minor axis),stat.error;phys.size.axisRatio
+pa,real,deg,Major axis position angle (North Eastwards),pos.posAng;meta.main;stat.mean
+brief,real,mag/arcsec2,Mean effective surface brightness,phot.mag.sb;meta.main;stat.mean
+e_brief,real,mag/arcsec2,Actual error on brief (Mean effective surface brightness),stat.error;phot.mag.sb
+bt,real,mag,Total B-magnitude,phot.mag;em.opt.B;meta.main;stat.mean
+e_bt,real,mag,Actual error on bt (Total B-magnitude),stat.error;phot.mag;em.opt.B
+it,real,mag,Total I-magnitude,phot.mag;em.opt.I;meta.main;stat.mean
+e_it,real,mag,Actual error on it (Total I-magnitude),stat.error;phot.mag;em.opt.I
+ut,real,mag,Total U-magnitude,phot.mag;em.opt.U;meta.main;stat.mean
+vt,real,mag,Total V-magnitude,phot.mag;em.opt.V;meta.main;stat.mean
+ube,real,mag,Effective U-B color,phot.color;em.opt.U;em.opt.B;meta.main;stat.mean
+bve,real,mag,Effective B-V color,phot.color;em.opt.B;em.opt.V;meta.main;stat.mean
+vmaxg,real,km/s,Apparent maximum rotation velocity of gas,phys.veloc.rotat;meta.main;stat.mean
+e_vmaxg,real,km/s,Actual error on vmaxg (Apparent maximum rotation velocity of gas),stat.error;phys.veloc.rotat
+vmaxs,real,km/s,Apparent maximum rotation velocity of stars,phys.veloc.rotat;meta.main;stat.mean
+e_vmaxs,real,km/s,Actual error on vmaxs (Apparent maximum rotation velocity of stars),stat.error;phys.veloc.rotat
+vdis,real,km/s,Central velocity dispersion,phys.veloc.dispersion;meta.main;stat.mean
+e_vdis,real,km/s,Actual error on vdis (Central velocity dispersion),stat.error;phys.veloc.dispersion
+m21,real,mag,21-cm line flux in magnitude,phot.mag;em.line.HI;meta.main;stat.mean
+e_m21,real,mag,Actual error on m21 (21-cm line flux in magnitude),stat.error;phot.mag;em.line.HI
+mfir,real,mag,Far infrared magnitude,phot.mag;em.IR;meta.main;stat.mean
+vrad,real,km/s,Heliocentric radial velocity (cz) from radio measurement,phys.veloc;em.radio;stat.mean
+e_vrad,real,km/s,Actual error on vrad (Heliocentric radial velocity (cz) from radio measurement),stat.error;phys.veloc;em.radio
+vopt,real,km/s,Heliocentric radial velocity (cz) from optical measurement,phys.veloc;em.opt;stat.mean
+e_vopt,real,km/s,Actual error on vopt (Heliocentric radial velocity (cz) from optical measurement),stat.error;phys.veloc;em.opt
+v,real,km/s,Mean Heliocentric radial velocity (cz),phys.veloc;meta.main;stat.mean
+e_v,real,km/s,Actual error on v (Mean Heliocentric radial velocity),stat.error;phys.veloc
+ag,real,mag,Galactic extinction in B-band,phys.absorption.gal;em.opt.B
+ai,real,mag,Internal extinction due to inclination in B-band,phys.absorption;em.opt.B
+incl,real,deg,Inclination between line of sight and polar axis of a galaxy,pos.posAng
+a21,real,mag,21-cm self absorption,phys.absorption.gal;em.line.HI
+logdc,real,dex(0.1 arcmin),log of apparent corrected diameter (dc in 0.1 arcmin),phys.angSize.smajAxis
+btc,real,mag,Total apparent corrected B-magnitude,phot.mag.reddFree;em.opt.B
+itc,real,mag,Total apparent corrected I-magnitude,phot.mag.reddFree;em.opt.I
+ubtc,real,mag,Total apparent corrected U-B color,phot.color.reddFree;em.opt.U;em.opt.B
+bvtc,real,mag,Total apparent corrected B-V color,phot.color.reddFree;em.opt.B;em.opt.V
+bri25,real,mag/arcsec2,Mean surface brightness within isophote 25 ,phot.mag.sb;meta.main;stat.mean
+vrot,real,km/s,Maximum rotation velocity corrected for inclination,phys.veloc.rotat;meta.main;stat.mean
+e_vrot,real,km/s,Actual error on vrot (Maximum rotation velocity corrected for inclination),stat.error;phys.veloc.rotat
+mg2,real,mag,Central Lick Mg2 index,phot.mag;spect.line;meta.main;stat.mean
+e_mg2,real,mag,Actual error on mg2( Central Lick Mg2 index ),stat.error;spect.line
+logavmm,real,,,
+e_logavmm,real,,,
+m21c,real,mag,Corrected 21-cm line flux in magnitude,phot.mag.reddFree;em.line.HI
+hic,real,mag,21-cm index btc-m21c in magnitude,phot.color.reddFree;em.opt.B;em.line.HI
+vlg,real,km/s,Radial velocity (cz) with respect to the Local Group,phys.veloc
+vgsr,real,km/s,Radial velocity (cz) with respect to the GSR,phys.veloc
+vvir,real,km/s,Radial velocity (cz) corrected for LG infall onto Virgo,phys.veloc
+v3k,real,km/s,Radial velocity (cz) with respect to the CMB radiation,phys.veloc
+modz,real,mag,Cosmological distance modulus (from vvir with &Lambda;CDM),phot.mag.distMod
+mod0,real,mag,Distance modulus from distance measurements,phot.mag.distMod
+mabs,real,mag,Absolute B-band magnitude,phys.magAbs;em.opt.B
+numtype,smallint,,Object Type,
+agnclass,character varying,,Activity class of AGN,src.class
+f_astrom,smallint,,Precision flag on astrometry,meta.code.qual
+e_mod0,real,mag,Actual error on mod0 (Distance modulus from distance measurements),phot.mag.distMod
+e_modz,real,mag,Actual error on modz (Cosmological distance modulus from vvir with &Lambda;CDM),phot.mag.distMod
+e_mabs,real,,,
+modbest,real,mag,"Best distance modulus, combining mod0 and modz",phot.mag.distMod
+e_modbest,real,mag,"Actual error on modbest (Best distance modulus, combining mod0 and modz)",phot.mag.distMod
+kt,real,mag,Total K-magnitude,phot.mag;em.IR.K;meta.main;stat.mean
+e_kt,real,mag,Actual error on kt (Total K-magnitude),stat.error;phot.mag;em.IR.K
+e_ut,real,mag,Actual error on ut (Total U-magnitude),stat.error;phot.mag;em.opt.U
+e_vt,real,mag,Actual error on vt (Total V-magnitude),stat.error;phot.mag;em.opt.V

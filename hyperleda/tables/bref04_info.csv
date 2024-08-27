@@ -1,0 +1,8 @@
+name,data_type,description,ucd
+iref,integer,Code of Bib.Ref.,meta.id
+refclair,character varying,,
+bibcode,character varying,Bibcode,meta.bib.bibcode
+status,smallint,,
+year,smallint,,
+author1,character varying,,
+time,timestamp without time zone,,

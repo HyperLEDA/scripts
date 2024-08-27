@@ -1,0 +1,7 @@
+name,data_type,description,ucd
+pgc,integer,PGC number,meta.id;meta.main
+design,character varying,Designation,
+flag,smallint,Flag associated to measurement,
+iref,integer,Code of Bib.Ref.,meta.id
+hl_table,character varying,,
+hl_table_seq,integer,,
