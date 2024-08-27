@@ -76,6 +76,6 @@ for table_name in ["m000", "designation", "bref04"]:
     table_columns = pd.merge(table_columns, df, on="column_name", how="left")
     table_columns.rename(columns={"column_name": "name"}, inplace=True)
 
-    table_columns.to_csv(f"./tables/{table_name}_info.csv", index=False)
+    table_columns.to_csv(f"./hyperleda/tables/{table_name}_info.csv", index=False)
 
 conn.close()

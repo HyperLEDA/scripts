@@ -1,0 +1,20 @@
+name,data_type,unit,description
+AGCNr,int,,Entry number in catalog
+Name,str,,Common name
+RAdeg_HI,float,,
+DECdeg_HI,float,,
+RAdeg_OC,float,,
+DECdeg_OC,float,,
+Vhelio,int,km/s,Heliocentric velocity of the HI profile midpoint
+W50,int,km/s,Observed velocity width at 50%% of peak on either side
+sigW,int,,
+W20,int,km/s,Observed velocity width at 20%% of peak on either side
+HIflux,float,Jy.km/s,HI line flux density
+sigflux,float,Jy.km/s,Uncertainty in HIflux
+SNR,float,,Ratio of peak flux to rms noise
+RMS,float,mJy,The RMS noise in the extracted spectrum at 10 km/s resolution
+Dist,float,Mpc,"Adopted distance, where applicable"
+sigDist,float,,
+logMH,float,,
+siglogMH,float,,
+HIcode,int,,HI source code (2)

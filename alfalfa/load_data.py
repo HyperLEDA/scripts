@@ -1,74 +1,71 @@
 import pandas as pd
+import hyperleda
+import os
+import psycopg2
 
 
 
+ALFALFA_BIBCODE = "2018ApJ...861...49H" # bibcode for ALFALFA 2018 article from ads and offisial website
+
+conn = psycopg2.connect(
+    host= os.getenv("HYPERLEDA_DB_HOST"),
+    database=os.getenv("HYPERLEDA_DB_DATABASE"),
+    user=os.getenv("HYPERLEDA_DB_USER"),
+    password=os.getenv("HYPERLEDA_DB_PASSWORD"),
+    port=os.getenv("HYPERLEDA_DB_PORT")
+)
+
+client = hyperleda.HyperLedaClient(endpoint=hyperleda.TEST_ENDPOINT) 
+
+
+def del_nans(row):
+    return {k:v for k,v in row.items() if v == v}
+
+def leda_dtyper(row) -> str: 
+    return hyperleda.DataType(row["data_type"])
+
+
+# getting columns info
+table_columns = pd.read_csv(f"./alfalfa/tables/main_info.csv")
+table_columns["data_type"] = table_columns.apply(leda_dtyper, axis=1)
+table_dict = table_columns.to_dict("records")
+
+# table creation
+table_name = f"alfalfa_hi_source_catalog" 
+
+table_id = client.create_table(
+    hyperleda.CreateTableRequestSchema(
+        table_name=table_name,
+        columns=[
+            hyperleda.ColumnDescription(**del_nans(column)) for column in table_dict
+            ],
+        bibcode=ALFALFA_BIBCODE,
+    )
+)
+
+print(f"Created table '{table_name}' with ID: {table_id}")
+
+# reading all data from alfalfa catalog
 df = pd.read_csv("./alfalfa/tables/main_data.csv")
-print(df.info())
 
+offset = 0
+batch = 500
+test_limit = 1000
 
-# for table in ["metaa000", "metaa001", "metaa002", 'metaa003', 'metaa004', 'metaa005', 
-#               'metaa006', 'metaa007', 'metaa009', 'metaa010','metaa011', 'metaa101', 
-#               'metaa102', 'metaa103', 'metaa104', 'metaa105', 'metaa106', 'metaa107',
-#               'metaa108', 'metaa109', 'metaa110', 'metaa112', 'metaa113', 'metaa114', 
-#               'metaa115']:
-#     query = f"""select DISTINCT * from {table}"""
-#     df = df._append(pd.read_sql_query(query, conn))
+while offset <= test_limit:
+    data = df.iloc[offset:offset+batch]
 
-# df = df.drop_duplicates()
-# df = df.pivot_table(values='field', index='field', columns='name', aggfunc='first')
-# df = df.reset_index() 
+    if data.empty:
+        break
 
-# def check_nans(row, col1='unit', col2='units') -> str: 
-#     if pd.isna(row[col1]) and not pd.isna(row[col2]):
-#         return row[col2]
-#     return row[col1]
+    print(data)
+    client.add_data(table_id, data)
 
+    print(f"Added {data.shape[0]} rows to the table {table_name}. In total {offset + batch} rows")
 
-# df['unit'] = df.apply(check_nans, axis=1)
-# df = df.drop('units', axis=1)
-# df.rename(columns={"field": "column_name"}, inplace=True)
-# # print(df.columns)
-# df = df[['column_name', 'unit',"description", "ucd"]]
+    offset += batch
 
-# # ucd fix
-# def ucd_fix_stat_error(row):
-#     # "phys.angSize.smajAxis;stat.error" -> "stat.error;phys.angSize.smajAxis"
-#     if row["ucd"] == row["ucd"] and "stat.error" in row["ucd"]:
-#         splitted_row = row["ucd"].split(";")
-#         return  ";".join([splitted_row[-1]] + splitted_row[:-1])
-#     return row["ucd"]
+print(f"Added all data to the table '{table_name}'")
 
-# df['ucd'] = df.apply(ucd_fix_stat_error, axis=1)
-    
-
-# df = df.replace({
-#     "src.morph.param;meta.code.multip;stat.mean": "src.morph.param;stat.mean",
-#     "src.morph.type;stat.error": "stat.error;src.morph.type",
-#     "spect.line;meta.main;stat.mean": "phot.mag;spect.line;meta.main;stat.mean",
-#     })
-
-# # units fix
-# df = df.replace({
-#     "log(0.1 arcmin)": "dex(0.1 arcmin)",
-#     "log": "dex",
-#     })
-
-
-# for table_name in ["m000", "designation", "bref04"]:
-#     if table_name != "m000":
-#         df = df[['column_name',"description", "ucd"]]
-
-#     query = f"""SELECT COLUMN_NAME, DATA_TYPE 
-#     FROM INFORMATION_SCHEMA.COLUMNS 
-#     WHERE TABLE_NAME = '{table_name}'"""
-#     table_columns = pd.read_sql_query(query, conn)
-
-#     if table_name == "m000":
-#         # bit type unknown column
-#         table_columns = table_columns.drop(table_columns.loc[table_columns['column_name']=="hptr"].index)
-
-#     table_columns = pd.merge(table_columns, df, on="column_name", how="left")
-#     table_columns.rename(columns={"column_name": "name"}, inplace=True)
-
-#     table_columns.to_csv(f"./tables/{table_name}_info.csv", index=False)
+conn.close()
 
