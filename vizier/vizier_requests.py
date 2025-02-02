@@ -13,10 +13,12 @@ def get_columns(client: vizier.VizierClass, catalog_name: str) -> list[str]:
     return meta.colnames
 
 
-def get_table_schema(table_name: str, columns: list[str]) -> str:
+def download_table(table_name: str, columns: list[str], max_rows: int | None = None) -> str:
+    out_max = "unlimited" if max_rows is None else max_rows
+
     payload = [
         "-oc.form=dec",
-        "-out.max=10",
+        f"-out.max={out_max}",
         "-sort=_r",
         "-order=I",
         f"-out.src={table_name}",
