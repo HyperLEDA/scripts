@@ -1,8 +1,9 @@
-import hyperleda
 import os
+
 import pandas as pd
 import psycopg2
 
+import hyperleda
 
 HYPERLEDA_BIBCODE = "2014A&A...570A..13M"  # bibcode for Leda 2014 article from ads
 
@@ -37,9 +38,7 @@ for old_table_name in ["m000", "designation"]:
     table_id = client.create_table(
         hyperleda.CreateTableRequestSchema(
             table_name=table_name,
-            columns=[
-                hyperleda.ColumnDescription(**del_nans(column)) for column in table_dict
-            ],
+            columns=[hyperleda.ColumnDescription(**del_nans(column)) for column in table_dict],
             bibcode=HYPERLEDA_BIBCODE,
         )
     )
@@ -64,9 +63,7 @@ for old_table_name in ["m000", "designation"]:
         print(data)
         client.add_data(table_id, data)
 
-        print(
-            f"Added {data.shape[0]} rows to the table {table_name}. In total {offset + batch} rows"
-        )
+        print(f"Added {data.shape[0]} rows to the table {table_name}. In total {offset + batch} rows")
 
         offset += batch
     print(f"Added all data to the table '{table_name}'")
