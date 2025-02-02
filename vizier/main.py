@@ -128,7 +128,6 @@ def upload_table(hyperleda_client: hyperleda.HyperLedaClient, table_id: int, tab
             rows.append(dict(row))
 
         df = pandas.DataFrame(rows)
-        print(df)
 
         hyperleda_client.add_data(table_id=table_id, data=df)
 

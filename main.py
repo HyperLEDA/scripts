@@ -16,12 +16,14 @@ def vizier():
 
 
 @vizier.command()
-def download():
+@click.option("--table", "-t", required=True, help="Table name")
+@click.option("--catalog", "-c", required=True, help="Catalog name")
+def download(table, catalog):
     """
     Downloads specified table
     """
 
-    vizier_downloader.command("III/258", "III/258/fbs", False)
+    vizier_downloader.command(catalog, table, False)
 
 
 if __name__ == "__main__":
