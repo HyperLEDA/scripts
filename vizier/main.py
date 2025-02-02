@@ -10,6 +10,7 @@ from vizier import helpers, vizier_requests
 
 log: structlog.stdlib.BoundLogger = structlog.get_logger()
 
+
 def load_schema(catalog_name: str, table_name: str, ignore_cache: bool) -> tree.VOTableFile:
     schema_cache_filename = f".vizier_cache/schemas/{helpers.get_filename(catalog_name, table_name)}.vot"
 
@@ -40,19 +41,10 @@ def load_schema(catalog_name: str, table_name: str, ignore_cache: bool) -> tree.
     return table
 
 
-def command(catalog_name: str, table_name: str, ignore_cache: bool):
-    # 1. check cache for the votable file
-    # 2. get columns of the table from vizier metadata method
-    # 3. query votable from vizier with the columns
-    # 4. save votable file to cache
-    # 5. convert votable metadata to hyperleda request
-    # 6. create table in hyperleda
-    # 7. in batches of 500 rows, send add data request to the table
-
-    schema = load_schema(catalog_name, table_name, ignore_cache)
-    log.info("Schema loaded", table=schema.resources[0].description)
-
-    table = schema.get_first_table()
+def get_table_schema(
+    schema: tree.VOTableFile, catalog_name: str, table_name: str
+) -> hyperleda.CreateTableRequestSchema:
+    table: tree.TableElement = schema.get_first_table()
 
     columns = []
 
@@ -70,14 +62,31 @@ def command(catalog_name: str, table_name: str, ignore_cache: bool):
     bibcode = next(filter(lambda info: info.name == "cites", schema.resources[0].infos))
     bibcode = bibcode.value.split(":")[1]
 
-    request = hyperleda.CreateTableRequestSchema(
+    return hyperleda.CreateTableRequestSchema(
         table_name=helpers.get_filename(catalog_name, table_name),
         columns=columns,
         description=table.description,
         bibcode=bibcode,
     )
 
+
+def command(catalog_name: str, table_name: str, ignore_cache: bool):
+    # 1. check cache for the votable file
+    # 2. get columns of the table from vizier metadata method
+    # 3. query votable from vizier with the columns
+    # 4. save votable file to cache
+    # 5. convert votable metadata to hyperleda request
+    # 6. create table in hyperleda
+    # 7. in batches of 500 rows, send add data request to the table
+
     client = hyperleda.HyperLedaClient()
+
+    schema = load_schema(catalog_name, table_name, ignore_cache)
+    log.info("Schema loaded", table=schema.resources[0].description)
+
+    request = get_table_schema(schema, catalog_name, table_name)
+    log.info("Requesting table creation...", table_name=request.table_name)
+
     table_id = client.create_table(request)
 
     log.info("Table created", table_id=table_id)
