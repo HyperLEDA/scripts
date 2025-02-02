@@ -1,7 +1,6 @@
 import pandas as pd
 import psycopg2
 
-
 conn = psycopg2.connect(
     host="localhost",
     database="hyperleda",
@@ -100,9 +99,7 @@ for table_name in ["m000", "designation", "bref04"]:
 
     if table_name == "m000":
         # bit type unknown column
-        table_columns = table_columns.drop(
-            table_columns.loc[table_columns["column_name"] == "hptr"].index
-        )
+        table_columns = table_columns.drop(table_columns.loc[table_columns["column_name"] == "hptr"].index)
 
     table_columns = pd.merge(table_columns, df, on="column_name", how="left")
     table_columns.rename(columns={"column_name": "name"}, inplace=True)
