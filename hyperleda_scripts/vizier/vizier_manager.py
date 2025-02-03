@@ -49,7 +49,7 @@ class VizierTableManager:
             raise ValueError("Table not found in the catalog")
 
         cache_filename = self._get_cache_path("tables", catalog_name, table_name)
-        table.write(cache_filename, format="votable")
+        table.write(str(cache_filename), format="votable")
 
         return table
 
