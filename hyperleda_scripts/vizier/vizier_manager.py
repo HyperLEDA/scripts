@@ -21,11 +21,11 @@ class VizierTableManager:
         self.log = structlog.get_logger()
 
     def get_schema_from_cache(self, catalog_name: str, table_name: str) -> tree.VOTableFile:
-        cache_filename = self._get_cache_path("schemas", catalog_name, table_name)
+        cache_filename = self._obtain_cache_path("schemas", catalog_name, table_name)
         return self._read_votable(cache_filename)
 
     def get_table_from_cache(self, catalog_name: str, table_name: str) -> astropy.table.Table:
-        cache_filename = self._get_cache_path("tables", catalog_name, table_name)
+        cache_filename = self._obtain_cache_path("tables", catalog_name, table_name)
         return astropy.table.Table.read(cache_filename, format="votable")
 
     def download_schema(self, catalog_name: str, table_name: str) -> tree.VOTableFile:
@@ -33,9 +33,9 @@ class VizierTableManager:
         columns = get_columns(vizier_client, catalog_name)
         raw_header = download_table(table_name, columns, max_rows=10)
 
-        cache_filename = self._get_cache_path("schemas", catalog_name, table_name)
-        cache_filename.parent.mkdir(parents=True, exist_ok=True)
+        cache_filename = self._obtain_cache_path("schemas", catalog_name, table_name)
         cache_filename.write_text(raw_header)
+
         self.log.info("Wrote cache", location=str(cache_filename))
 
         return votable.parse(cache_filename, verify="warn")
@@ -48,14 +48,17 @@ class VizierTableManager:
         if not table:
             raise ValueError("Table not found in the catalog")
 
-        cache_filename = self._get_cache_path("tables", catalog_name, table_name)
-        table.write(str(cache_filename), format="votable")
+        cache_filename = self._obtain_cache_path("tables", catalog_name, table_name)
+        table.write(cache_filename, format="votable")
 
         return table
 
-    def _get_cache_path(self, type_path: str, catalog_name: str, table_name: str) -> Path:
+    def _obtain_cache_path(self, type_path: str, catalog_name: str, table_name: str) -> Path:
         filename = f"{helpers.get_filename(catalog_name, table_name)}.vot"
-        return Path(self.cache_path) / type_path / filename
+        path = Path(self.cache_path) / type_path / filename
+
+        path.parent.mkdir(parents=True, exist_ok=True)
+        return path
 
     def _read_votable(self, path: Path) -> tree.VOTableFile:
         if self.ignore_cache:
