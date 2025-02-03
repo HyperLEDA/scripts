@@ -28,10 +28,10 @@ class VizierTableManager:
         cache_filename = self._get_cache_path("tables", catalog_name, table_name)
         return astropy.table.Table.read(cache_filename, format="votable")
 
-    def download_schema(self, catalog_name: str, table_name: str, max_rows: int | None = None) -> tree.VOTableFile:
+    def download_schema(self, catalog_name: str, table_name: str) -> tree.VOTableFile:
         vizier_client = vizier.VizierClass(row_limit=5)
         columns = get_columns(vizier_client, catalog_name)
-        raw_header = download_table(table_name, columns, max_rows=max_rows)
+        raw_header = download_table(table_name, columns, max_rows=10)
 
         cache_filename = self._get_cache_path("schemas", catalog_name, table_name)
         cache_filename.parent.mkdir(parents=True, exist_ok=True)
