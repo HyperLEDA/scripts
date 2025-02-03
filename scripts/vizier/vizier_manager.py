@@ -9,7 +9,7 @@ from astropy.io import votable
 from astropy.io.votable import tree
 from astroquery import vizier
 
-from vizier import helpers
+from scripts.vizier import helpers
 
 VIZIER_URL = "https://vizier.cds.unistra.fr/viz-bin/votable/-tsv"
 

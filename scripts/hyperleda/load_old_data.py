@@ -1,9 +1,8 @@
 import os
 
+import hyperleda
 import pandas as pd
 import psycopg2
-
-import hyperleda
 
 HYPERLEDA_BIBCODE = "2014A&A...570A..13M"  # bibcode for Leda 2014 article from ads
 
