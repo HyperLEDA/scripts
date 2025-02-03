@@ -1,7 +1,7 @@
+import hyperleda
 import structlog
 
-import hyperleda
-from vizier import hyperleda_manager, vizier_manager
+from scripts.vizier import hyperleda_manager, vizier_manager
 
 log: structlog.stdlib.BoundLogger = structlog.get_logger()
 

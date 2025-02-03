@@ -2,12 +2,12 @@ import itertools
 
 import astropy
 import astropy.table
+import hyperleda
 import pandas
 import structlog
 from astropy.io.votable import tree
 
-import hyperleda
-from vizier import helpers
+from scripts.vizier import helpers
 
 
 class HyperLedaUploader:

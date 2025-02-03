@@ -39,7 +39,7 @@ for table in [
     "metaa115",
 ]:
     query = f"""select DISTINCT * from {table}"""
-    df = df._append(pd.read_sql_query(query, conn))
+    df = df.append(pd.read_sql_query(query, conn))
 
 df = df.drop_duplicates()
 df = df.pivot_table(values="field", index="field", columns="name", aggfunc="first")

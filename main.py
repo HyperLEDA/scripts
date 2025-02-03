@@ -1,5 +1,4 @@
 import click
-
 import vizier.main as vizier_downloader
 
 
