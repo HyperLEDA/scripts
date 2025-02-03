@@ -7,7 +7,7 @@ import pandas
 import structlog
 from astropy.io.votable import tree
 
-from scripts.vizier import helpers
+from hyperleda_scripts.vizier import helpers
 
 
 class HyperLedaUploader:

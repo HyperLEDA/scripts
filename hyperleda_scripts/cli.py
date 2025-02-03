@@ -1,6 +1,6 @@
 import click
 
-import app.vizier.main as vizier_downloader
+import hyperleda_scripts
 
 
 @click.group()
@@ -23,7 +23,7 @@ def download(table, catalog):
     Downloads specified table
     """
 
-    vizier_downloader.command(catalog, table, False)
+    hyperleda_scripts.vizier_command(catalog, table, False)
 
 
 if __name__ == "__main__":
