@@ -1,6 +1,6 @@
 import click
 
-import app.vizier.main as vizier_downloader
+from scripts import vizier as vizier_downloader
 
 
 @click.group()
