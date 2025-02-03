@@ -1,7 +1,6 @@
 [project]
 name = "hyperleda-scripts"
 version = "0.1.0"
-description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -19,10 +18,11 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-hyperleda-scripts = "main:cli"
+hyperleda-scripts = "hyperleda_scripts.cli:cli"
 
 [tool.uv.sources]
 hyperleda = { git = "https://github.com/HyperLEDA/client.git" }
+hyperleda-scripts = { workspace = true }
 
 [tool.ruff]
 line-length = 120
@@ -66,5 +66,6 @@ select = [
 
 [dependency-groups]
 dev = [
+    "hyperleda-scripts",
     "ruff>=0.9.4",
 ]
