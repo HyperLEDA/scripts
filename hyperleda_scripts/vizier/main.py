@@ -1,12 +1,18 @@
 import hyperleda
 import structlog
 
-from hyperleda_scripts.vizier import hyperleda_manager, vizier_manager
+from hyperleda_scripts.vizier import helpers, hyperleda_manager, vizier_manager
 
 log: structlog.stdlib.BoundLogger = structlog.get_logger()
 
 
-def command(catalog_name: str, table_name: str, ignore_cache: bool) -> int:
+def command(
+    catalog_name: str,
+    table_name: str,
+    ignore_cache: bool = False,
+    hyperleda_table_name: str | None = None,
+) -> int:
+    hyperleda_table_name = hyperleda_table_name or helpers.get_filename(catalog_name, table_name)
     table_manager = vizier_manager.VizierTableManager(".vizier_cache", ignore_cache)
     uploader = hyperleda_manager.HyperLedaUploader(hyperleda.HyperLedaClient())
 
@@ -15,7 +21,7 @@ def command(catalog_name: str, table_name: str, ignore_cache: bool) -> int:
     except FileNotFoundError:
         schema = table_manager.download_schema(catalog_name, table_name)
 
-    table_id = uploader.upload_schema(schema, catalog_name, table_name)
+    table_id = uploader.upload_schema(schema, hyperleda_table_name)
 
     try:
         table = table_manager.get_table_from_cache(catalog_name, table_name)

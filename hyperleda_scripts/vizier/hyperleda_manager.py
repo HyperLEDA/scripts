@@ -15,8 +15,8 @@ class HyperLedaUploader:
         self.client = client
         self.log = structlog.get_logger()
 
-    def upload_schema(self, schema: tree.VOTableFile, catalog_name: str, table_name: str) -> int:
-        request = self._create_schema_request(schema, catalog_name, table_name)
+    def upload_schema(self, schema: tree.VOTableFile, table_name: str) -> int:
+        request = self._create_schema_request(schema, table_name)
         self.log.info("Creating table", table_name=request.table_name)
         return self.client.create_table(request)
 
@@ -32,9 +32,7 @@ class HyperLedaUploader:
 
             self.client.add_data(table_id=table_id, data=df)
 
-    def _create_schema_request(
-        self, schema: tree.VOTableFile, catalog_name: str, table_name: str
-    ) -> hyperleda.CreateTableRequestSchema:
+    def _create_schema_request(self, schema: tree.VOTableFile, table_name: str) -> hyperleda.CreateTableRequestSchema:
         table = schema.get_first_table()
         columns = [
             hyperleda.ColumnDescription(
@@ -49,7 +47,7 @@ class HyperLedaUploader:
         bibcode = self._extract_bibcode(schema)
 
         return hyperleda.CreateTableRequestSchema(
-            table_name=helpers.get_filename(catalog_name, table_name),
+            table_name=table_name,
             columns=columns,
             description=table.description,
             bibcode=bibcode,
