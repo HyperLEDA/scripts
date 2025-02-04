@@ -6,7 +6,7 @@ from hyperleda_scripts.vizier import hyperleda_manager, vizier_manager
 log: structlog.stdlib.BoundLogger = structlog.get_logger()
 
 
-def command(catalog_name: str, table_name: str, ignore_cache: bool):
+def command(catalog_name: str, table_name: str, ignore_cache: bool) -> int:
     table_manager = vizier_manager.VizierTableManager(".vizier_cache", ignore_cache)
     uploader = hyperleda_manager.HyperLedaUploader(hyperleda.HyperLedaClient())
 
@@ -23,3 +23,5 @@ def command(catalog_name: str, table_name: str, ignore_cache: bool):
         table = table_manager.download_table(catalog_name, table_name)
 
     uploader.upload_table_data(table_id, table)
+
+    return table_id

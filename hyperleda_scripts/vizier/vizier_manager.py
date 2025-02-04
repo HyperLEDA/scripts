@@ -22,7 +22,11 @@ class VizierTableManager:
 
     def get_schema_from_cache(self, catalog_name: str, table_name: str) -> tree.VOTableFile:
         cache_filename = self._obtain_cache_path("schemas", catalog_name, table_name)
-        return self._read_votable(cache_filename)
+
+        if self.ignore_cache:
+            self.log.info("Ignore cache flag is set")
+            raise FileNotFoundError()
+        return votable.parse(str(cache_filename))
 
     def get_table_from_cache(self, catalog_name: str, table_name: str) -> astropy.table.Table:
         cache_filename = self._obtain_cache_path("tables", catalog_name, table_name)
@@ -38,7 +42,7 @@ class VizierTableManager:
 
         self.log.info("Wrote cache", location=str(cache_filename))
 
-        return votable.parse(cache_filename, verify="warn")
+        return votable.parse(cache_filename)
 
     def download_table(self, catalog_name: str, table_name: str) -> astropy.table.Table:
         vizier_client = vizier.VizierClass(row_limit=-1)
@@ -59,12 +63,6 @@ class VizierTableManager:
 
         path.parent.mkdir(parents=True, exist_ok=True)
         return path
-
-    def _read_votable(self, path: Path) -> tree.VOTableFile:
-        if self.ignore_cache:
-            self.log.info("Ignore cache flag is set")
-            raise FileNotFoundError()
-        return votable.parse(str(path), verify="warn")
 
 
 def get_columns(client: vizier.VizierClass, catalog_name: str) -> list[str]:
