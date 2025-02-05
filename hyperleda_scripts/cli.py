@@ -26,12 +26,43 @@ def vizier():
 Target table name inside Hyperleda database. If not specified, will be generated from catalog and table names
 """,
 )
-def download(catalog, table, ignore_cache, hyperleda_table_name):
+@click.option(
+    "--bib-title",
+    help="Title of the source paper. Can only be specified with author and year, otherwise ignored",
+)
+@click.option(
+    "--bib-year",
+    help="Year the paper was published in. Can only be specified with author and title, otherwise ignored",
+)
+@click.option(
+    "--bib-author",
+    help="Author of the source paper. Can only be specified with title and year, otherwise ignored",
+)
+@click.option("--log-level", default="info", help="Log level")
+def download(
+    catalog,
+    table,
+    ignore_cache,
+    hyperleda_table_name,
+    bib_title,
+    bib_year,
+    bib_author,
+    log_level,
+):
     """
     Downloads specified table
     """
 
-    hyperleda_scripts.vizier_command(catalog, table, ignore_cache, hyperleda_table_name)
+    hyperleda_scripts.vizier_command(
+        catalog,
+        table,
+        ignore_cache,
+        hyperleda_table_name,
+        bib_title,
+        bib_year,
+        bib_author,
+        log_level,
+    )
 
 
 if __name__ == "__main__":
