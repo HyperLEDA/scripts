@@ -11,10 +11,17 @@ def command(
     table_name: str,
     ignore_cache: bool = False,
     hyperleda_table_name: str | None = None,
+    bib_title: str | None = None,
+    bib_year: str | None = None,
+    bib_author: str | None = None,
 ) -> int:
+    bib_info = None
+    if bib_title and bib_year and bib_author:
+        bib_info = hyperleda_manager.BibInfo(title=bib_title, year=int(bib_year), author=bib_author)
+
     hyperleda_table_name = hyperleda_table_name or helpers.get_filename(catalog_name, table_name)
     table_manager = vizier_manager.VizierTableManager(".vizier_cache", ignore_cache)
-    uploader = hyperleda_manager.HyperLedaUploader(hyperleda.HyperLedaClient())
+    uploader = hyperleda_manager.HyperLedaUploader(hyperleda.HyperLedaClient(), bib_info)
 
     try:
         schema = table_manager.get_schema_from_cache(catalog_name, table_name)

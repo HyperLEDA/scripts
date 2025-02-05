@@ -1,4 +1,5 @@
 import itertools
+from dataclasses import dataclass
 
 import astropy
 import astropy.table
@@ -7,16 +8,29 @@ import pandas
 import structlog
 from astropy.io.votable import tree
 
-from hyperleda_scripts.vizier import helpers
+
+@dataclass
+class BibInfo:
+    title: str
+    year: int
+    author: str
 
 
 class HyperLedaUploader:
-    def __init__(self, client: hyperleda.HyperLedaClient):
+    def __init__(self, client: hyperleda.HyperLedaClient, bib_info: BibInfo | None = None):
         self.client = client
         self.log = structlog.get_logger()
+        self.bib_info = bib_info
 
     def upload_schema(self, schema: tree.VOTableFile, table_name: str) -> int:
         request = self._create_schema_request(schema, table_name)
+
+        if self.bib_info:
+            bib_name = self.client.create_internal_source(
+                self.bib_info.title, [self.bib_info.author], self.bib_info.year
+            )
+            request.bibcode = bib_name
+
         self.log.info("Creating table", table_name=request.table_name)
         return self.client.create_table(request)
 
