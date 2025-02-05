@@ -26,6 +26,7 @@ class HyperLedaUploader:
         request = self._create_schema_request(schema, table_name)
 
         if self.bib_info:
+            self.log.info("Creating internal bibliography entry", title=self.bib_info.title)
             bib_name = self.client.create_internal_source(
                 self.bib_info.title, [self.bib_info.author], self.bib_info.year
             )
