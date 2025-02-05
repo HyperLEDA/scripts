@@ -14,7 +14,10 @@ def command(
     bib_title: str | None = None,
     bib_year: str | None = None,
     bib_author: str | None = None,
+    log_level: str = "info",
 ) -> int:
+    structlog.configure(wrapper_class=structlog.make_filtering_bound_logger(log_level))
+
     bib_info = None
     if bib_title and bib_year and bib_author:
         bib_info = hyperleda_manager.BibInfo(title=bib_title, year=int(bib_year), author=bib_author)
