@@ -10,6 +10,7 @@ dependencies = [
     "hyperleda",
     "numpy>=2.2.2",
     "pandas>=2.2.3",
+    "psycopg>=3.2.5",
     "structlog>=25.1.0",
 ]
 

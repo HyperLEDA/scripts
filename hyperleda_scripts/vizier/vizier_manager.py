@@ -33,7 +33,7 @@ class VizierTableManager:
         return astropy.table.Table.read(cache_filename, format="votable")
 
     def download_schema(self, catalog_name: str, table_name: str) -> tree.VOTableFile:
-        vizier_client = vizier.VizierClass(row_limit=5, vizier_server="vizier.inasan.ru")
+        vizier_client = vizier.VizierClass(row_limit=5)
         columns = get_columns(vizier_client, catalog_name)
         raw_header = download_table(table_name, columns, max_rows=10)
 
