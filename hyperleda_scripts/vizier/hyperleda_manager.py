@@ -36,8 +36,10 @@ class HyperLedaUploader:
         return self.client.create_table(request)
 
     def upload_table_data(self, table_id: int, table: astropy.table.Table, batch_size: int = 500):
+        offset = 0
         for batch in itertools.batched(table, batch_size):
-            self.log.info("Uploading batch", batch_size=len(batch))
+            self.log.info("Uploading batch", offset=offset, batch_size=len(batch))
+            offset += len(batch)
 
             rows = []
             for row in batch:
@@ -51,7 +53,7 @@ class HyperLedaUploader:
         table = schema.get_first_table()
         columns = [
             hyperleda.ColumnDescription(
-                name=field.name,
+                name=field.ID,
                 data_type=field.datatype,
                 ucd=field.ucd,
                 description=field.description,
