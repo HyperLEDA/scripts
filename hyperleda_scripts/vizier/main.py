@@ -28,6 +28,7 @@ def command(
 
     try:
         schema = table_manager.get_schema_from_cache(catalog_name, table_name)
+        log.debug("Hit cache for the schema, no downloading will be performed")
     except FileNotFoundError:
         schema = table_manager.download_schema(catalog_name, table_name)
 
@@ -35,6 +36,7 @@ def command(
 
     try:
         table = table_manager.get_table_from_cache(catalog_name, table_name)
+        log.debug("Hit cache for the table, no downloading will be performed")
     except Exception:
         table = table_manager.download_table(catalog_name, table_name)
 

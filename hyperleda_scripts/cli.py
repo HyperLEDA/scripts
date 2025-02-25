@@ -65,5 +65,17 @@ def download(
     )
 
 
+@cli.group()
+def leda():
+    """
+    Query the table from Old Hyperleda database
+    """
+
+
+@leda.command(name="download")
+def leda_download():
+    hyperleda_scripts.leda_command()
+
+
 if __name__ == "__main__":
     cli()

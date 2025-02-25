@@ -1,0 +1,14 @@
+services:
+  oldhyperledadb:
+    image: postgis/postgis:17-3.5
+    environment:
+      POSTGRES_DB: "hyperleda"
+      POSTGRES_USER: "hyperleda"
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    ports:
+      - "7432:5432"
+    healthcheck:
+      test: psql 'host=localhost port=5432 dbname=hyperleda user=hyperleda password=$${POSTGRES_PASSWORD}' -qtA -c 'select 1;' || exit 1
+      timeout: 5s
+      interval: 5s
+      retries: 5
