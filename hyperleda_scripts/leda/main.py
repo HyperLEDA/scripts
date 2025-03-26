@@ -21,6 +21,8 @@ def command(
     hyperleda_db_password: str = "password",
     hyperleda_db_port: str = "7432",
     endpoint: str = hyperleda.DEFAULT_ENDPOINT,
+    test_limit: int = 100000,
+    batch_size: int = 500,
 ):
     dsn = f"postgresql://{hyperleda_db_host}:{hyperleda_db_port}/{hyperleda_db_database}?user={hyperleda_db_user}&password={hyperleda_db_password}"
 
@@ -28,7 +30,7 @@ def command(
 
     client = hyperleda.HyperLedaClient(endpoint=endpoint)
 
-    for old_table_name in ["m000", "designation"]:
+    for old_table_name in ["m000"]:
         # getting columns info
         table_columns = pd.read_csv(METADATA_PATH.format(old_table_name))
         table_columns["data_type"] = table_columns.apply(leda_dtyper, axis=1)
@@ -48,11 +50,9 @@ def command(
         print(f"Created table '{table_name}' with ID: {table_id}")
 
         offset = 0
-        batch = 500
-        test_limit = 1000
 
         while offset <= test_limit:
-            query = f"SELECT * FROM {old_table_name} OFFSET {offset} LIMIT {batch};"
+            query = f"SELECT * FROM {old_table_name} ORDER BY pgc OFFSET {offset} LIMIT {batch_size};"
             data = pd.read_sql_query(query, conn)
 
             # removing unknown bit type field
@@ -65,9 +65,9 @@ def command(
             print(data)
             client.add_data(table_id, data)
 
-            print(f"Added {data.shape[0]} rows to the table {table_name}. In total {offset + batch} rows")
+            print(f"Added {data.shape[0]} rows to the table {table_name}. In total {offset + batch_size} rows")
 
-            offset += batch
+            offset += batch_size
         print(f"Added all data to the table '{table_name}'")
 
     conn.close()

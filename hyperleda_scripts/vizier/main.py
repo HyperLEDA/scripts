@@ -24,7 +24,9 @@ def command(
 
     hyperleda_table_name = hyperleda_table_name or helpers.get_filename(catalog_name, table_name)
     table_manager = vizier_manager.VizierTableManager(".vizier_cache", ignore_cache)
-    uploader = hyperleda_manager.HyperLedaUploader(hyperleda.HyperLedaClient(), bib_info)
+    uploader = hyperleda_manager.HyperLedaUploader(
+        hyperleda.HyperLedaClient(endpoint=hyperleda.TEST_ENDPOINT), bib_info
+    )
 
     try:
         schema = table_manager.get_schema_from_cache(catalog_name, table_name)
