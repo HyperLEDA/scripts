@@ -39,6 +39,7 @@ Target table name inside Hyperleda database. If not specified, will be generated
     help="Author of the source paper. Can only be specified with title and year, otherwise ignored",
 )
 @click.option("--log-level", default="info", help="Log level")
+@click.option("--endpoint", help="HyperLeda API endpoint. If not specified, will use the default endpoint")
 def download(
     catalog,
     table,
@@ -48,6 +49,7 @@ def download(
     bib_year,
     bib_author,
     log_level,
+    endpoint,
 ):
     """
     Downloads specified table
@@ -62,6 +64,7 @@ def download(
         bib_year,
         bib_author,
         log_level,
+        endpoint,
     )
 
 

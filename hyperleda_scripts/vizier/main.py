@@ -15,6 +15,7 @@ def command(
     bib_year: str | None = None,
     bib_author: str | None = None,
     log_level: str = "info",
+    endpoint: str = hyperleda.DEFAULT_ENDPOINT,
 ) -> int:
     structlog.configure(wrapper_class=structlog.make_filtering_bound_logger(log_level))
 
@@ -25,7 +26,7 @@ def command(
     hyperleda_table_name = hyperleda_table_name or helpers.get_filename(catalog_name, table_name)
     table_manager = vizier_manager.VizierTableManager(".vizier_cache", ignore_cache)
     uploader = hyperleda_manager.HyperLedaUploader(
-        hyperleda.HyperLedaClient(endpoint=hyperleda.TEST_ENDPOINT), bib_info
+        hyperleda.HyperLedaClient(endpoint=endpoint), bib_info
     )
 
     try:
