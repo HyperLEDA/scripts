@@ -45,6 +45,7 @@ class VizierTableManager:
         return votable.parse(cache_filename)
 
     def download_table(self, catalog_name: str, table_name: str) -> astropy.table.Table:
+        self.log.info("Downloading table from Vizier", catalog_name=catalog_name, table_name=table_name)
         vizier_client = vizier.VizierClass(row_limit=-1)
         catalogs = vizier_client.get_catalogs(catalog_name)
 

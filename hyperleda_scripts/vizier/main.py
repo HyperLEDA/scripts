@@ -15,7 +15,7 @@ def command(
     bib_year: str | None = None,
     bib_author: str | None = None,
     log_level: str = "info",
-    endpoint: str = hyperleda.DEFAULT_ENDPOINT,
+    endpoint: str = hyperleda.TEST_ENDPOINT,
 ) -> int:
     structlog.configure(wrapper_class=structlog.make_filtering_bound_logger(log_level))
 
