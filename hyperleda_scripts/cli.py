@@ -41,7 +41,7 @@ Target table name inside Hyperleda database. If not specified, will be generated
 )
 @click.option("--log-level", default="info", help="Log level")
 @click.option(
-    "--endpoint", 
+    "--endpoint",
     help="HyperLeda API endpoint. If not specified, will use the testing HyperLEDA API",
     default=hyperleda.TEST_ENDPOINT,
 )
@@ -72,6 +72,17 @@ def download(
         endpoint,
     )
 
+
+@cli.group()
+def leda():
+    """
+    Query the table from Old Hyperleda database
+    """
+
+
+@leda.command(name="download")
+def leda_download():
+    hyperleda_scripts.leda_command()
 
 
 if __name__ == "__main__":
