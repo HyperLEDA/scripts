@@ -81,8 +81,17 @@ def leda():
 
 
 @leda.command(name="download")
-def leda_download():
-    hyperleda_scripts.leda_command()
+@click.option("--start-offset", default=0, help="Start offset")
+@click.option("--test-limit", default=None, help="Test limit")
+@click.option("--batch-size", default=600, help="Batch size")
+@click.option("--max-workers", default=4, help="Max workers")
+def leda_download(start_offset, test_limit, batch_size, max_workers):
+    hyperleda_scripts.leda_command(
+        start_offset=start_offset,
+        test_limit=test_limit,
+        batch_size=batch_size,
+        max_workers=max_workers,
+    )
 
 
 if __name__ == "__main__":
